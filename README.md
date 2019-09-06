@@ -1,7 +1,7 @@
 # VD-SerVis
 Application HTML-CSS-JS réalisée pour le cours "Visualisation de données" donné par Isaac Pante (Faculté des Lettres, Université de Lausanne). Une version plus complète avec de nouvelles fonctionnalités et données est à venir et servira de support d'analyse et de visualisation pour le Mémoire de Master.
 
-Aperçu :
+**Aperçu :**
 ![alt text](https://github.com/nmonach2/VD-SerVis/blob/master/CaptureAppli.JPG)
 
 # Indications
