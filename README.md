@@ -7,9 +7,7 @@ Application HTML-CSS-JS réalisée pour le cours "Visualisation de données" don
 # Indications
 Télécharger tous les fichiers présents dans le répertoire VD-SerVis.
 
-Il est possible de lancer l'application soit en ouvrant le fichier `index.html` avec un navigateur (de préférence Chrome), soit sur l'hôte local (localhost:5000) en exécutant dans l'invite de commande le fichier `activate.bat` présent dans le dossier `Scripts` pour activer l'environnement virtuel, puis en chargeant l'application `app.py` (`python app.py`) sur le serveur. 
-
-L'application est ensuite prête à être visualisée sur `localhost:5000`
+Il est possible de lancer l'application soit en ouvrant le fichier `index.html` avec un navigateur (de préférence Chrome), soit sur l'hôte local (localhost:5000) en exécutant dans l'invite de commande le fichier `activate.bat` présent dans le dossier `Scripts` pour activer l'environnement virtuel, puis en chargeant l'application `app.py` (`python app.py`) sur le serveur. L'application est ensuite prête à être visualisée sur `localhost:5000`
 
 # Description
 
