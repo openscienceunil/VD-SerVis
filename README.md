@@ -1,5 +1,5 @@
 # VD-SerVis
-Application HTML-CSS-JS réalisée pour le cours "Visualisation de données" donné par Isaac Pante (Faculté des Lettres, Université de Lausanne) par Nicolas Monachon. Une version plus complète avec de nouvelles fonctionnalités et données est à venir et servira de support d'analyse et de visualisation pour mon Mémoire de Master.
+Application HTML-CSS-JS réalisée pour le cours "Visualisation de données" donné par Isaac Pante (Faculté des Lettres, Université de Lausanne). Une version plus complète avec de nouvelles fonctionnalités et données est à venir et servira de support d'analyse et de visualisation pour le Mémoire de Master.
 
 # Indications
 Télécharger tous les fichiers présents dans le répertoire VD-SerVis.
