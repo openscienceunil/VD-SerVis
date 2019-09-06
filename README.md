@@ -1,8 +1,7 @@
 # VD-SerVis
 Application HTML-CSS-JS réalisée pour le cours "Visualisation de données" donné par Isaac Pante (Faculté des Lettres, Université de Lausanne). Une version plus complète avec de nouvelles fonctionnalités et données est à venir et servira de support d'analyse et de visualisation pour le Mémoire de Master.
 
-Capture d'écran :
-
+Aperçu :
 ![alt text](https://github.com/nmonach2/VD-SerVis/blob/master/CaptureAppli.JPG)
 
 # Indications
@@ -50,5 +49,6 @@ Les données relatives aux temps de trajet ont été extraites directement depui
 
 Les données relatives à la population sont issues du recensement démographique sur la population et les ménages mené par l'Office Fédéral de la Statistique en 2015 et publié en 2016 : https://www.bfs.admin.ch/bfs/fr/home/actualites/quoi-de-neuf.assetdetail.1442443.html. Ces données sont disponibles à l'hectomètre, ce qui est à ce jour le plus fin niveau d'analyse qui puisse être mis à disposition.
 
+![alt text](https://github.com/nmonach2/VD-SerVis/blob/master/CaptureAppli2.JPG)
 
 Copyright © 2019 - Nicolas Monachon
