@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+    
+        <meta charset="utf-8" />
+        <title>VD-SerVis</title>
+        <link rel="shortcut icon" href="/static/images/favicon.ico">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+        <script src="{{ url_for('static', filename='schools.js') }}"></script>
+        <script src="{{ url_for('static', filename='population.js') }}"></script>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+        <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="http://d3js.org/d3.v3.min.js"></script>
+        <script src="https://unpkg.com/leaflet-lasso@2.0.4/dist/leaflet-lasso.umd.min.js"></script>
+        <script src="{{ url_for('static', filename='L.D3SvgOverlay.min.js') }}"></script>
+        
+    </head>
+    
+    <body>
+    
+    
+    
+    
+        <div class="box1">
+        
+            <div class="logo_officiel"
+            <p><img src="static/images/logo_officiel.svg" width="70" height="70" /></p>
+        </div>
+        <div class="bandeau">
+            <p><img src="static/images/Bandeau.png" width="1264" height="75" /></p>
+        </div>
+        
+        </div>
+        
+        
+        
+        
+        <div class="box2">
+        
+            <div class="text_settings"><b>&emsp;&emsp;Paramètres de sélection</b></div>
+            <div id="logo_settings" class="logo_settings">
+                <p><img src="static/images/settings.svg" width="40" height="40" /></p>
+            </div>
+            <div class="box_type_service"><b>&emsp;&emsp;1. Type de service</b></div>
+            <div class="title_box_type_service"></div>
+            <div id="logo_type_service" class="logo_type_service">
+                <p><img src="static/images/type_service.svg" width="25" height="25" /></p>
+            </div>
+            <div class="liste_deroulante">
+                <ul>
+                    <li value="1" id="ECS"><img src="/static/images/marqueur_ecole_8.svg" alt="ECS" />Ecoles secondaires</li>
+                    <!-- Autre types de services à implémenter par la suite :
+                        <li value="2" id="URG"><img src="/static/images/logo_urg.svg" alt="URG" />Services d'urgences hospitalières</li>
+                        <li value="3" id="AMB"><img src="/static/images/logo_amb.svg" alt="AMB" />Secours pré-hospitaliers</li>
+                        <li value="4" id="POM"><img src="/static/images/logo_pom.svg" alt="POM" />Service d'incendie et de secours</li>
+                        -->
+                </ul>
+            </div>
+            <div class = "fleche_liste_deroulante">
+                <p><img src="static/images/downarrow.jpg" width="25" height="25" /></p>
+            </div>
+            <div class="box_unites_selectionnees"><b>&emsp;&emsp;2. Unités de service</b></div>
+            <div class="title_box_unites_selectionnees"></div>
+            <div id = "hide_box_unites_selectionnees" class="hide_box_unites_selectionnees"></div>
+            <div id="logo_unites_selectionnees" class="logo_unites_selectionnees">
+                <p><img src="static/images/unites_selectionnees.svg" width="25" height="25" /></p>
+            </div>
+            <p class="nombre1">Il y a actuellement <b><span id="count_checked_checkboxes" onchange = "hide_duration_box()" style="color: #f68b1f;">0</span></b></p>
+            <p class="nombre2">unité(s) sélectionnée(s).</p>
+            <span title="Sélectionner hors carte les unités avec l'outil CHECKBOX"><button class="bouton_check"></button></span>
+            <span title="Sélectionner sur la carte les unités avec l'outil LASSO"><button class="bouton_lasso_select" id = "lasso_select" onclick ="check_sel()"></button></span>
+            <span title="Désélectionner sur la carte les unités avec l'outil LASSO"><button class="bouton_lasso_unselect" id = "lasso_unselect" onclick ="check_unsel()"></button></span>
+            <div id="lassoResult_select" class="lassoResult_sel"></div>
+            <div id="lassoResult_unselect" class="lassoResult_unsel"></div>
+            <form action="" class = "radio">
+                <input type="radio" name="sel" value="sel" id="sel"> Select<br>
+                <input type="radio" name="sel" value="unsel" id = "unsel"> Unselect
+            </form>
+            <div class="hover_bg">
+                <span class="helper"></span>
+                <div>
+                    <div class="hover_close">X</div>
+                    <p class="text_checkbox"> Sélectionnez une ou plusieurs unité(s) de service voulue(s)</p>
+                    <br>
+                    <br>
+                    <br>
+                    <script language="JavaScript">
+                        function toggle(source) {
+                          checkboxes = document.getElementsByName('foo');
+                          for(var i=0, n=checkboxes.length;i<n;i++) {
+                            checkboxes[i].checked = source.checked;
+                          }
+                        }
+                    </script>
+                    <div id ="form" name="form">
+                        <input type="checkbox" id ="selectAll" onClick="toggle(this); select_unit_first(); select_unit();"/>
+                        <p class="select_all">Tout sélectionner</p>
+                        <br>
+                        <br>
+                        <div class="checkbox_box" id="checkbox_box">
+                            <input type="checkbox" id="AIG" value="AIG"name="foo"onclick="select_unit_first();">EPS d'Aigle<br>
+                            <input type="checkbox" id="APP" value="APP"name="foo"onclick="select_unit();">EPS d'Apples-Bière et environs<br>
+                            <input type="checkbox" id="AUB" value="AUB"name="foo"onclick="select_unit()">EPS d'Aubonne et environs<br>
+                            <input type="checkbox" id="AVE" value="AVE"name="foo"onclick="select_unit()">EPS d'Avenches et environs<br>
+                            <input type="checkbox" id="BEG" value="BEG"name="foo"onclick="select_unit()">EPS de Begnins - l'Esplanade<br>
+                            <input type="checkbox" id="BER" value="BER"name="foo"onclick="select_unit()">EPS de Bercher - Plateau du Jorat<br>
+                            <input type="checkbox" id="BEX" value="BEX"name="foo"onclick="select_unit()">EPS de Bex<br>
+                            <input type="checkbox" id="BLO" value="BLO"name="foo"onclick="select_unit()">EPS de Blonay - St-Légier<br>
+                            <input type="checkbox" id="BUS" value="BUS"name="foo"onclick="select_unit()">EPS de Bussigny et Villars-Ste-Croix<br>
+                            <input type="checkbox" id="LAV" value="LAV"name="foo"onclick="select_unit()">EPS de Centre Lavaux<br>
+                            <input type="checkbox" id="OEX" value="OEX"name="foo"onclick="select_unit()">EPS de Château-d'Œx - Pays-d'Enhaut<br>
+                            <input type="checkbox" id="CPR" value="CPR"name="foo"onclick="select_unit()">EPS de Chavannes-près-Renens et de St-Sulpice<br>
+                            <input type="checkbox" id="CVR" value="CVR"name="foo"onclick="select_unit()">EPS de Chavornay et environs<br>
+                            <input type="checkbox" id="CHE" value="CHE"name="foo"onclick="select_unit()">EPS de Cheseaux-sur-Lausanne - La Chamberonne<br>
+                            <input type="checkbox" id="COP" value="COP"name="foo"onclick="select_unit()">ES de Coppet - Terre-Sainte<br>
+                            <input type="checkbox" id="COR" value="COR"name="foo"onclick="select_unit()">EPS de Corsier-sur-Vevey et environs<br>
+                            <input type="checkbox" id="COS" value="COS"name="foo"onclick="select_unit()">EPS de Cossonay - Penthalaz<br>
+                            <input type="checkbox" id="CRA" value="CRA"name="foo"onclick="select_unit()">EPS de Crassier - Elisabeth de Portes<br>
+                            <input type="checkbox" id="CRI" value="CRI"name="foo"onclick="select_unit()">EPS de Crissier<br>
+                            <input type="checkbox" id="CUG" value="CUG"name="foo"onclick="select_unit()">EPS de Cugy et environs<br>
+                            <input type="checkbox" id="ECH" value="ECH"name="foo"onclick="select_unit()">ES d'Echallens - Trois-Sapins<br>
+                        </div>
+                        <div class="checkbox_box"id="checkbox_box_2">
+                            <input type="checkbox" id="ECU" value="ECU"name="foo"onclick="select_unit()">EPS d'Ecublens<br>
+                            <input type="checkbox" id="EPA" value="EPA"name="foo"onclick="select_unit()">EPS d'Epalinges<br>
+                            <input type="checkbox" id="GEN" value="GEN"name="foo"onclick="select_unit()">EPS de Genolier et environs<br>
+                            <input type="checkbox" id="GLA" value="GLA"name="foo"onclick="select_unit()">ES de Gland<br>
+                            <input type="checkbox" id="GRA" value="GRA"name="foo"onclick="select_unit()">EPS de Grandson<br>
+                            <input type="checkbox" id="JOR" value="JOR"name="foo"onclick="select_unit()">EPS du Jorat<br>
+                            <input type="checkbox" id="LSA" value="LSA"name="foo"onclick="select_unit()">EPS La Sarraz - Veyron-Venoge<br>
+                            <input type="checkbox" id="LTP" value="LTP"name="foo"onclick="select_unit()">EPS de La Tour-de-Peilz<br>
+                            <input type="checkbox" id="LBV" value="LBV"name="foo"onclick="select_unit()">EPS de Lausanne - Belvédère<br>
+                            <input type="checkbox" id="LBG" value="LBG"name="foo"onclick="select_unit()">EPS de Lausanne - Bergières<br>
+                            <input type="checkbox" id="LBT" value="LBT"name="foo"onclick="select_unit()">EPS de Lausanne - Béthusy<br>
+                            <input type="checkbox" id="LIM" value="LIM"name="foo"onclick="select_unit()">EPS de Lausanne - Isabelle-de-Montolieu<br>
+                            <input type="checkbox" id="LEL" value="LEL"name="foo"onclick="select_unit()">EPS de Lausanne - L'Elysée<br>
+                            <input type="checkbox" id="LVI" value="LVI"name="foo"onclick="select_unit()">EPS de Lausanne - Villamont<br>
+                            <input type="checkbox" id="LCF" value="LCF"name="foo"onclick="select_unit()">EPS de Lausanne - C.-F. Ramuz<br>
+                            <input type="checkbox" id="LOL" value="LOL"name="foo"onclick="select_unit()">EPS Les Ormonts - Leysin<br>
+                            <input type="checkbox" id="LUT" value="LUT"name="foo"onclick="select_unit()">EPS de Lutry<br>
+                            <input type="checkbox" id="MSL" value="MSL"name="foo"onclick="select_unit()">EPS du Mont-sur-Lausanne<br>
+                            <input type="checkbox" id="MOE" value="MOE"name="foo"onclick="select_unit()">EPS de Montreux-Est<br>
+                            <input type="checkbox" id="MOO" value="MOO"name="foo"onclick="select_unit()">EPS de Montreux-Ouest<br>
+                            <input type="checkbox" id="MOR" value="MOR"name="foo"onclick="select_unit()">ES de Morges Beausobre<br>
+                        </div>
+                        <div class="checkbox_box"id="checkbox_box_3">
+                            <input type="checkbox" id="MOU" value="MOU"name="foo"onclick="select_unit()">ES de Moudon-Lucens et environs<br>
+                            <input type="checkbox" id="NYO" value="NYO"name="foo"onclick="select_unit()">ES de Nyon-Marens<br>
+                            <input type="checkbox" id="OLL" value="OLL"name="foo"onclick="select_unit()">EPS d'Ollon<br>
+                            <input type="checkbox" id="ORB" value="ORB"name="foo"onclick="select_unit()">ES d'Orbe et environs<br>
+                            <input type="checkbox" id="ORO" value="ORO"name="foo"onclick="select_unit()">EPS d'Oron-Palézieux<br>
+                            <input type="checkbox" id="PAY" value="PAY"name="foo"onclick="select_unit()">ES de Payerne et environs<br>
+                            <input type="checkbox" id="PRE" value="PRE"name="foo"onclick="select_unit()">EPS de Préverenges et environs<br>
+                            <input type="checkbox" id="PRI" value="PRI"name="foo"onclick="select_unit()">EPS de Prilly<br>
+                            <input type="checkbox" id="PUL" value="PUL"name="foo"onclick="select_unit()">ES de Pully<br>
+                            <input type="checkbox" id="REN" value="REN"name="foo"onclick="select_unit()">ES de Renens<br>
+                            <input type="checkbox" id="ROL" value="ROL"name="foo"onclick="select_unit()">EPS de Rolle<br>
+                            <input type="checkbox" id="STP" value="STP"name="foo"onclick="select_unit()">EPS de Saint-Prex et environs<br>
+                            <input type="checkbox" id="STC" value="STC"name="foo"onclick="select_unit()">EPS de Sainte-Croix et environs<br>
+                            <input type="checkbox" id="VDJ" value="VDJ"name="foo"onclick="select_unit()">EPS de la Vallée de Joux<br>
+                            <input type="checkbox" id="VAL" value="VAL"name="foo"onclick="select_unit()">EPS de Vallorbe, Ballaigues, Vallon du Nozon<br>
+                            <input type="checkbox" id="VEV" value="VEV"name="foo"onclick="select_unit()">EPS de Vevey<br>
+                            <input type="checkbox" id="VIL" value="VIL"name="foo"onclick="select_unit()">EPS de Villeneuve Haut-Lac<br>
+                            <input type="checkbox" id="YFB" value="YFB"name="foo"onclick="select_unit()">ES d'Yverdon-les-Bains - F.-B. de Felice<br>
+                            <input type="checkbox" id="YLM" value="YLM"name="foo"onclick="select_unit()">ES d'Yverdon-les-Bains - Léon-Michaud<br>
+                            <input type="checkbox" id="YVO" value="YVO"name="foo"onclick="select_unit()">EPS d'Yvonand et environs<br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box_choix_duree"><b>&emsp;&emsp;3. Temps de trajet</b></div>
+            <div class="title_box_choix_duree"></div>
+            <div id = "hide_box_choix_duree" class="hide_box_choix_duree"></div>
+            <div id="logo_choix_duree" class="logo_choix_duree">
+                <p><img src="static/images/choix_duree.svg" width="25" height="25" /></p>
+            </div>
+            <div class="slidecontainer">
+                <input type="range" min="0" max="41" value="0" class="slider" id="myRange">
+                <p class="nombre_temps_trajet">Temps de trajet: <b><span style="color: #f68b1f;" id="demo"></span></b> min.</p>
+            </div>
+            <span title="Supprimer les rectangles de la carte"><button class="eraseSquares" id="vis" value="vis" onclick="eraseSquares()"></button></span>
+            <span title="Supprimer les rectangles et la sélection de la carte"><button class="eraseSelection" id="eraseEverything" value="vis" onclick="eraseSelection()"></button></span>
+            <div class="box_population"><b>&emsp;&emsp;Grille de population</b></div>
+            <div class="title_box_population"></div>
+            <div id = "hide_box_population" class="hide_box_population"></div>
+            <div id="logo_population" class="logo_population">
+                <p><img src="static/images/population.svg" width="25" height="25" /></p>
+            </div>
+            <div class="checkbox_pop"><input type="checkbox" id="POP" value="POP" name="POP" onClick="togglePOP()">Afficher les différentiels de population<br>
+            </div>
+            
+        </div>
+        
+        
+        
+        
+        <div class="box3">
+        
+            <div id="mapdiv"></div>
+            <div id="coordinates" class="coordinates">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Coordonnées:</b> Déplacez la souris sur la carte</div>
+            <div id="logo_coord" class="logo_coord">
+                <p><img src="/static/images/coord.png" width="16" height="16" /></p>
+            </div>
+            
+        </div>
+        
+        
+        
+        
+        <div class="box4">
+        
+            <div class="text_calculs"><b>&emsp;&emsp;&nbsp;&nbsp;Résultats de la sélection</b></div>
+            <div id="logo_calculs" class="logo_calculs">
+                <p><img src="static/images/calculs.svg" width="40" height="40" /></p>
+            </div>
+            <div class="box_nombre_habitants"><b>&emsp;&emsp;Population à l'intérieur de la sélection :</b></div>
+            <div class="title_box_nombre_habitants"></div>
+            <div id="logo_type_service" class="logo_type_service">
+                <p><img src="static/images/population_selectionnee.svg" width="25" height="25" /></p>
+            </div>
+            <div class = "rect1"><span id ="selectedPop" style="font-size:15pt">0</span> &#128102</div>
+            <div class = "rect1b">
+                <p>habitants</p>
+                <p><span style = "font-weight:bold; font-size:7pt">dans la zone affichée</span></p>
+            </div>
+            <div class = "rect2"><span id ="selectedBass" style="font-size:15pt">0</span> &#128106</div>
+            <div class = "rect2b">
+                <p>habitants totaux</p>
+                <p><span style = "font-weight:bold; font-size:7pt">dans le(s) bassin(s) sél.</span></p>
+            </div>
+            <div class = "rect3"><b><span id ="selectedPerc">0</span>%<b></div>
+            <div class = "rect3b" id = "rect3b" ></div>
+            <div class = "rect3c">
+                <p>des habitants totaux</p>
+                <p><span style = "font-weight:bold; font-size:7pt">du (des) bassin(s) sél.</span></p>
+            </div>
+            <div class = "rect4"><span id ="MWD">0</span><span style = "font-size:10pt"> sec.</span></div>
+            <div class = "rect4b">
+                <p>Durée moyenne pondérée</p>
+                <p><span style = "font-weight:bold; font-size:7pt">dans la zone affichée</span></p>
+            </div>
+            <div class = "rect5"><span id ="MWDtot">0</span><span style = "font-size:10pt"> sec.</span></div>
+            <div class = "rect5b"><span id ="smiley">-</span></div>
+            <div class = "rect5c">
+                <p>Durée moyenne pondérée</p>
+                <p><span style = "font-weight:bold; font-size:7pt">dans le(s) bassin(s) sél.</span></p>
+            </div>
+            <div class = "rect6"><span id ="MWDVD">372.52</span><span style = "font-size:10pt"> sec.</span></div>
+            <div class = "rect6b">
+                <p>Durée moyenne pondérée</p>
+                <p><span style = "font-weight:bold; font-size:7pt">dans le canton</span></p>
+            </div>
+            <div id ="box_hist" name="box_hist" class="box_hist"><b>&emsp;&emsp;Histogramme du temps de trajet :</b></div>
+            <div class="title_box_hist"></div>
+            <div id="logo_hist" class="logo_hist">
+                <p><img src="static/images/hist.svg" width="25" height="25" /></p>
+            </div>
+            
+        </div>
+        
+        <script src="{{ url_for('static', filename='index.js') }}"></script>
+    </body>
+</html>
