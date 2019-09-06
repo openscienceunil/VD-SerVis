@@ -8,7 +8,7 @@ Application HTML-CSS-JS réalisée pour le cours "Visualisation de données" don
 Télécharger tous les fichiers présents dans le répertoire VD-SerVis.
 Il est possible de lancer l'application soit en ouvrant le fichier `index.html` avec un navigateur (de préférence Chrome), soit sur l'hôte local (localhost:5000) en saisissant dans l'invite de commande :
 
-`Scripts\actiate.bat'`
+`Scripts\activate.bat`
 
 pour activer l'environnement virtuel et 
 
