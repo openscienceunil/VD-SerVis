@@ -5,13 +5,13 @@ Application HTML CSS JS pour le cours "Visualisation de données"
 Télécharger tous les fichiers présents dans le répertoire VD-SerVis.
 Il est possible de lancer l'application sur l'hôte local (localhost:5000) en tapant dans l'invite de commande :
 
-Scripts\actiate.bat
+require 'Scripts\actiate.bat'
 
 pour activer l'environnement virtuel
 
 et
 
-python app.py
+require 'python app.py'
 
 pour lancer l'application VD-SerVis sur l'hôte local (localhost:5000).
 
